@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LobbySystem", "LobbySystem.csproj", "{A7AFADD5-46ED-4151-803F-C13712A2C86D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A7AFADD5-46ED-4151-803F-C13712A2C86D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7AFADD5-46ED-4151-803F-C13712A2C86D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7AFADD5-46ED-4151-803F-C13712A2C86D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7AFADD5-46ED-4151-803F-C13712A2C86D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E87D9B1A-EC87-45A5-86C7-AA0CA4A68EDE}
+	EndGlobalSection
+EndGlobal
