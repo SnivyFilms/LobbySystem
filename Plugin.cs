@@ -8,10 +8,11 @@
           public override string Name => "LobbySystem";
           public override string Prefix => Name;
           public override string Author => "@misfiy";
-          public override Version Version => new(1, 0, 1);
+          public override Version Version => new(1, 0, 3);
           public static Plugin Instance;
           private Handler eventHandler;
           private Harmony harmony { get; set; } = new("LobbySystem");
+
           public override void OnEnabled()
           {
                Instance = this;

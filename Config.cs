@@ -10,7 +10,8 @@ namespace LobbySystem
           public bool IsEnabled { get; set; } = true;
           public bool Debug { get; set; } = false;
           public double LobbyTime { get; set; } = 30;
-          public int MinimumPlayers { get; set; } = 2;
+          public short MinimumPlayers { get; set; } = 2;
+
           [Description("Edit the text shown")]
           public string TextShown { get; set; } = "<size=27>│ %status% │ <b>SERVER NAME</b>  │ <color=red>%playercount%/%maxplayers%</color> Inmates Waiting │</size>";
           public string PausedStatus { get; set; } = @"<color=red>🟥</color> Lobby Paused";
