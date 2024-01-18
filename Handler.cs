@@ -1,4 +1,6 @@
-﻿namespace LobbySystem
+﻿using Exiled.Events.EventArgs.Server;
+
+namespace LobbySystem
 {
      using Exiled.API.Features;
      using Exiled.Events.EventArgs.Player;
@@ -14,12 +16,10 @@
           private static Vector3 SpawnPosition => 
                Plugin.Instance.Config.SpawnRoom == RoomType.Unknown ? Plugin.Instance.Config.SpawnPosition : Room.Get(Plugin.Instance.Config.SpawnRoom).Position + Vector3.up;
           
-          public static CoroutineHandle LobbyTimer;
-          
           public void OnWaitingForPlayers()
           {
                GameObject.Find("StartRound").transform.localScale = Vector3.zero;
-               LobbyTimer = Timing.RunCoroutine(Lobby());
+               Timing.RunCoroutine(Lobby());
           }
 
           public void OnVerified(VerifiedEventArgs ev)
@@ -27,6 +27,12 @@
                if (!Round.IsLobby) return;
                ev.Player.Role.Set(RoleTypeId.Tutorial);
                ev.Player.Teleport(SpawnPosition);
+          }
+
+          public void OnChoosingStartTeamQueue(ChoosingStartTeamQueueEventArgs ev)
+          {
+               foreach (Player player in Player.List.Where(p => p.IsAlive))
+                    player.Role.Set(RoleTypeId.Spectator);
           }
 
           private IEnumerator<float> Lobby()
@@ -40,7 +46,7 @@
                     {
                          status = config.PausedStatus;
                     }
-                    else if (Player.List.Count(p => p.IsTutorial) < Plugin.Instance.Config.MinimumPlayers)
+                    else if (Player.List.Count(p => !p.IsOverwatchEnabled) < Plugin.Instance.Config.MinimumPlayers)
                     {
                          countdown = Plugin.Instance.Config.LobbyTime;
                          status = config.WaitingStatus;
@@ -60,9 +66,9 @@
 
                     if (countdown == 0)
                     {
-                         foreach (Player player in Player.List.Where(p => p.Role.Type == RoleTypeId.Tutorial))
+                         foreach (Player player in Player.List.Where(p => p.IsAlive))
                               player.Role.Set(RoleTypeId.Spectator);
-                         Timing.CallDelayed(0.2f, () => Round.Start());
+                         Round.Start();
                          yield break;
                     }
 

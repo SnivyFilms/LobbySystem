@@ -20,6 +20,7 @@
                harmony.PatchAll();
 
                Exiled.Events.Handlers.Server.WaitingForPlayers += eventHandler.OnWaitingForPlayers;
+               Exiled.Events.Handlers.Server.ChoosingStartTeamQueue += eventHandler.OnChoosingStartTeamQueue;
                Exiled.Events.Handlers.Player.Verified += eventHandler.OnVerified;
 
                base.OnEnabled();
@@ -28,6 +29,7 @@
           public override void OnDisabled()
           {
                Exiled.Events.Handlers.Server.WaitingForPlayers -= eventHandler.OnWaitingForPlayers;
+               Exiled.Events.Handlers.Server.ChoosingStartTeamQueue -= eventHandler.OnChoosingStartTeamQueue;
                Exiled.Events.Handlers.Player.Verified -= eventHandler.OnVerified;
 
                harmony.UnpatchAll();

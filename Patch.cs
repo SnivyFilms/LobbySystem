@@ -1,30 +1,30 @@
-﻿using PluginAPI.Events;
-using HarmonyLib;
+﻿using CommandSystem.Commands.RemoteAdmin;
 using Exiled.API.Features;
+using PluginAPI.Events;
+using HarmonyLib;
 using PlayerRoles;
 
 namespace LobbySystem;
 
-[HarmonyPatch(typeof(CharacterClassManager))]
+[HarmonyPatch(typeof(CharacterClassManager), nameof(CharacterClassManager.ForceRoundStart))]
 internal static class RoundStartPatch
 {
-    [HarmonyPatch(nameof(CharacterClassManager.Start))]
-    private static void Prefix() => SetRole();
-    
-    [HarmonyPatch(nameof(CharacterClassManager.ForceRoundStart))]
-    private static void Postfix(CharacterClassManager __instance)
+    private static void Postfix()
     {
-        SetRole();
-        
-        EventManager.ExecuteEvent(new RoundStartEvent());
-        __instance.NetworkRoundStarted = true;
-        __instance.RpcRoundStarted();
+        EventManager.ExecuteEvent( new RoundStartEvent());
+        Server.Host.ReferenceHub.characterClassManager.NetworkRoundStarted = true;
+        Server.Host.ReferenceHub.characterClassManager.RpcRoundStarted();
     }
+}
 
-    private static void SetRole()
+[HarmonyPatch(typeof(ForceStartCommand), nameof(ForceStartCommand.Execute))]
+internal static class CommandPatch
+{
+    private static void Postfix(bool __result)
     {
-        foreach (Player player in Player.List.Where(p => p.Role == RoleTypeId.Tutorial))
-            player.Role.Set(RoleTypeId.Spectator);
+        if (__result) 
+            foreach(Player player in Player.List)
+                player.Role.Set(RoleTypeId.Spectator);
     }
 }
 
