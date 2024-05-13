@@ -62,7 +62,10 @@ namespace LobbySystem
                         .Replace("%playercount%", Player.List.Count(p => p.IsTutorial).ToString())
                         .Replace("%maxplayers%", Server.MaxPlayerCount.ToString());
 
-                    Map.Broadcast(1, text, default, true);
+                    if (config.UseHints)
+                         Map.ShowHint(text, 1);
+                    else
+                         Map.Broadcast(1, text, default, true);
 
                     if (countdown == 0)
                     {

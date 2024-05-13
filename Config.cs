@@ -13,6 +13,7 @@ namespace LobbySystem
           public short MinimumPlayers { get; set; } = 2;
 
           [Description("Edit the text shown")]
+          public bool UseHints { get; set; } = false;
           public string TextShown { get; set; } = "<size=27>│ %status% │ <b>SERVER NAME</b>  │ <color=red>%playercount%/%maxplayers%</color> Inmates Waiting │</size>";
           public string PausedStatus { get; set; } = @"<color=red>🟥</color> Lobby Paused";
           public string WaitingStatus { get; set; } = @"<color=yellow>🟨</color> Waiting for Players";
