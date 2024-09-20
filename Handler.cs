@@ -73,7 +73,6 @@ namespace LobbySystem
             
             if (config.OpenDoorsForMoreRoom)
             {
-                // Open doors and store references in the list
                 foreach (DoorType doorType in doorsToOpen)
                 {
                     Door door = Door.Get(doorType);
@@ -89,17 +88,15 @@ namespace LobbySystem
                     if (door.Room == Room.Get(RoomType.LczClassDSpawn) && !door.IsOpen)
                     {
                         door.IsOpen = true;
-                        doorsOpened.Add(door); // Log the door as opened
+                        doorsOpened.Add(door);
                         Log.Debug($"Opened door: {door.Name} (LczClassDSpawn)");
                     }
                 }
-
-                // Explicitly close the LightContainmentDoor
                 Door lightContainmentDoor = Door.Get(DoorType.LightContainmentDoor);
                 if (lightContainmentDoor != null && lightContainmentDoor.IsOpen)
                 {
                     lightContainmentDoor.IsOpen = false;
-                    doorsOpened.Remove(lightContainmentDoor); // Ensure it's not marked as opened
+                    doorsOpened.Remove(lightContainmentDoor);
                 }
             }
         }
@@ -140,8 +137,6 @@ namespace LobbySystem
         public void OnVerified(VerifiedEventArgs ev)
         {
             if (!Round.IsLobby) return;
-
-            // Set all players to the same spawn point.
             ev.Player.Role.Set(RoleTypeId.Tutorial);
             ev.Player.Teleport(_selectedSpawnPoint);
         }
