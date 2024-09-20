@@ -19,21 +19,24 @@ namespace LobbySystem
         private Config config = Plugin.Instance.Config;
         private Vector3 _selectedSpawnPoint;
         private Dictionary<Door, bool> _doorLockStates = new Dictionary<Door, bool>();
+
         private void SelectRandomSpawnPoint()
         {
-            
             if (config.UseRoomsToSpawnAt)
             {
-                Room? selectedRoom = Room.List.FirstOrDefault(room => room.Type == config.SpawnRooms[random.Next(0, config.SpawnRooms.Count)]);
+                Room? selectedRoom = Room.List.First(room =>
+                    room.Type == config.SpawnRooms[random.Next(config.SpawnRooms.Count)]);
                 if (selectedRoom != null)
                     _selectedSpawnPoint = selectedRoom.Position + Vector3.up;
+                Log.Debug($"Selected Room is {selectedRoom}");
             }
             else
             {
-                _selectedSpawnPoint = config.DefinedSpawnPosition[random.Next(0, config.DefinedSpawnPosition.Count)];
+                _selectedSpawnPoint = config.DefinedSpawnPosition[random.Next(config.DefinedSpawnPosition.Count)];
+                Log.Debug($"Selected Spawn Point is {_selectedSpawnPoint}");
             }
         }
-        
+
         private void LockAllDoors()
         {
             _doorLockStates.Clear();
@@ -41,25 +44,62 @@ namespace LobbySystem
             foreach (Door door in Door.List)
             {
                 _doorLockStates[door] = door.IsLocked;
-                
+
                 if (!door.IsLocked)
-                {
                     door.ChangeLock(DoorLockType.AdminCommand);
-                }
+            }
+
+            if (config.OpenDoorsForMoreRoom)
+            {
+                Door.Get(DoorType.GateA).IsOpen = true;
+                Door.Get(DoorType.GateB).IsOpen = true;
+                Door.Get(DoorType.Scp914Gate).IsOpen = true;
+                Door.Get(DoorType.GR18Gate).IsOpen = true;
+                Door.Get(DoorType.GR18Inner).IsOpen = true;
+                Door.Get(DoorType.Scp330).IsOpen = true;
+                Door.Get(DoorType.Scp330Chamber).IsOpen = true;
+                Door.Get(DoorType.Scp079First).IsOpen = true;
+                Door.Get(DoorType.Scp079Second).IsOpen = true;
+                Door.Get(DoorType.Scp079Armory).IsOpen = true;
+                Door.Get(DoorType.LczArmory).IsOpen = true;
+                Door.Get(DoorType.HczArmory).IsOpen = true;
+                foreach (Door door in Door.List)
+                    if (door.Room == Room.Get(RoomType.LczClassDSpawn))
+                        door.IsOpen = true;
+                Door.Get(DoorType.LightContainmentDoor).IsOpen = false;
             }
         }
-        
+
         public void RestoreDoorLockStates()
         {
             foreach (var doorEntry in _doorLockStates)
             {
                 Door door = doorEntry.Key;
                 bool wasLocked = doorEntry.Value;
-                
+
                 if (!wasLocked && door.IsLocked)
                 {
                     door.ChangeLock(DoorLockType.None);
                 }
+            }
+
+            if (config.OpenDoorsForMoreRoom)
+            {
+                Door.Get(DoorType.GateA).IsOpen = false;
+                Door.Get(DoorType.GateB).IsOpen = false;
+                Door.Get(DoorType.Scp914Gate).IsOpen = false;
+                Door.Get(DoorType.GR18Gate).IsOpen = false;
+                Door.Get(DoorType.GR18Inner).IsOpen = false;
+                Door.Get(DoorType.Scp330).IsOpen = false;
+                Door.Get(DoorType.Scp330Chamber).IsOpen = false;
+                Door.Get(DoorType.Scp079First).IsOpen = false;
+                Door.Get(DoorType.Scp079Second).IsOpen = false;
+                Door.Get(DoorType.Scp079Armory).IsOpen = false;
+                Door.Get(DoorType.LczArmory).IsOpen = false;
+                Door.Get(DoorType.HczArmory).IsOpen = false;
+                foreach (Door door in Door.List)
+                    if (door.Room == Room.Get(RoomType.LczClassDSpawn))
+                        door.IsOpen = false;
             }
         }
 
@@ -133,12 +173,13 @@ namespace LobbySystem
                 yield return Timing.WaitForSeconds(1);
             }
         }
+
         public void OnPickingUpItem(PickingUpItemEventArgs ev)
         {
             if (Round.IsLobby && !config.AllowItemPickup)
                 ev.IsAllowed = false;
         }
-        
+
         public void OnPlayerHurt(HurtingEventArgs ev)
         {
             if (config.PlayersDieFromEnviromentalHazards)
@@ -146,7 +187,7 @@ namespace LobbySystem
 
             if (!Round.IsLobby)
                 return;
-            
+
             if (ev.Player == null)
                 return;
 
@@ -156,7 +197,7 @@ namespace LobbySystem
                     ev.IsAllowed = false;
                     break;
                 case DamageType.Crushed:
-                
+
                     ev.IsAllowed = false;
                     var roomcoord = ev.Player.CurrentRoom.Doors
                         .Where(d => d.RequiredPermissions.RequiredPermissions ==
@@ -172,6 +213,12 @@ namespace LobbySystem
                     ev.IsAllowed = false;
                     break;
             }
+        }
+
+        public void OnInteractingLocker(InteractingLockerEventArgs ev)
+        {
+            if (Round.IsLobby && !config.AllowItemPickup)
+                ev.IsAllowed = false;
         }
     }
 }

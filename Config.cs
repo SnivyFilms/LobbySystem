@@ -25,7 +25,6 @@ namespace LobbySystem
           {
                RoomType.LczArmory,
                RoomType.Lcz914,
-               RoomType.LczGlassBox,
                RoomType.Hcz106,
                RoomType.Hcz079,
                RoomType.EzPcs,
@@ -44,5 +43,8 @@ namespace LobbySystem
 
           [Description("Can players die from enviromental hazards? (I.E. the death pit in 106s room)")]
           public bool PlayersDieFromEnviromentalHazards { get; set; } = false;
+
+          [Description("Open some doors for more room to move around before round start")]
+          public bool OpenDoorsForMoreRoom { get; set; } = true;
      }
 }

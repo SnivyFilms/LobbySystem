@@ -19,6 +19,7 @@
                Instance = this;
                eventHandler = new Handler();
                harmony.PatchAll();
+               Exiled.Events.Handlers.Player.InteractingLocker += eventHandler.OnInteractingLocker;
                Exiled.Events.Handlers.Player.Hurting += eventHandler.OnPlayerHurt;
                Exiled.Events.Handlers.Player.PickingUpItem += eventHandler.OnPickingUpItem;
                Exiled.Events.Handlers.Server.WaitingForPlayers += eventHandler.OnWaitingForPlayers;
@@ -30,6 +31,7 @@
 
           public override void OnDisabled()
           {
+               Exiled.Events.Handlers.Player.InteractingLocker -= eventHandler.OnInteractingLocker;
                Exiled.Events.Handlers.Player.Hurting -= eventHandler.OnPlayerHurt;
                Exiled.Events.Handlers.Player.PickingUpItem -= eventHandler.OnPickingUpItem;
                Exiled.Events.Handlers.Server.WaitingForPlayers -= eventHandler.OnWaitingForPlayers;
