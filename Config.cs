@@ -26,7 +26,6 @@ namespace LobbySystem
                RoomType.LczArmory,
                RoomType.Lcz914,
                RoomType.LczGlassBox,
-               RoomType.Hcz939,
                RoomType.Hcz106,
                RoomType.Hcz079,
                RoomType.EzPcs,

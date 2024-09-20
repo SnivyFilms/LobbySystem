@@ -18,11 +18,7 @@ namespace LobbySystem
         private Random random = new Random();
         private Config config = Plugin.Instance.Config;
         private Vector3 _selectedSpawnPoint;
-        
-        // Dictionary to track the original lock state of each door
         private Dictionary<Door, bool> _doorLockStates = new Dictionary<Door, bool>();
-
-        // Randomly selects a spawn point from the configured spawn locations.
         private void SelectRandomSpawnPoint()
         {
             
@@ -37,47 +33,39 @@ namespace LobbySystem
                 _selectedSpawnPoint = config.DefinedSpawnPosition[random.Next(0, config.DefinedSpawnPosition.Count)];
             }
         }
-
-        // Store the lock state of all doors and lock them
+        
         private void LockAllDoors()
         {
-            _doorLockStates.Clear(); // Clear previous states
+            _doorLockStates.Clear();
 
             foreach (Door door in Door.List)
             {
-                // Save the original lock state (true if locked, false if unlocked)
                 _doorLockStates[door] = door.IsLocked;
                 
-                // Lock the door if it's not already locked
                 if (!door.IsLocked)
                 {
                     door.ChangeLock(DoorLockType.AdminCommand);
                 }
             }
         }
-
-        // Restore the lock state of all doors based on their original status
+        
         public void RestoreDoorLockStates()
         {
             foreach (var doorEntry in _doorLockStates)
             {
                 Door door = doorEntry.Key;
                 bool wasLocked = doorEntry.Value;
-
-                // If the door was unlocked originally and is now locked, unlock it
+                
                 if (!wasLocked && door.IsLocked)
                 {
-                    door.ChangeLock(DoorLockType.None); // Unlock the door (toggle from locked to unlocked)
+                    door.ChangeLock(DoorLockType.None);
                 }
             }
         }
 
         public void OnWaitingForPlayers()
         {
-            // Select the spawn point once the server is waiting for players.
             SelectRandomSpawnPoint();
-
-            // Lock all doors when the lobby starts
             LockAllDoors();
 
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
@@ -123,7 +111,7 @@ namespace LobbySystem
 
                 string text = config.TextShown
                     .Replace("%status%", status)
-                    .Replace("%playercount%", Player.List.Count(p => p.IsTutorial).ToString())
+                    .Replace("%playercount%", Player.List.Count(p => !p.IsOverwatchEnabled).ToString())
                     .Replace("%maxplayers%", Server.MaxPlayerCount.ToString());
 
                 if (config.UseHints)
@@ -136,7 +124,6 @@ namespace LobbySystem
                     foreach (Player player in Player.List.Where(p => p.IsAlive))
                         player.Role.Set(RoleTypeId.Spectator);
 
-                    // Restore the original lock states of the doors
                     RestoreDoorLockStates();
 
                     Round.Start();
