@@ -1,4 +1,5 @@
 ﻿using CommandSystem.Commands.RemoteAdmin;
+using CommandSystem.Commands.Shared;
 using Exiled.API.Features;
 using PluginAPI.Events;
 using HarmonyLib;
@@ -22,6 +23,7 @@ internal static class CommandPatch
 {
     private static void Postfix(bool __result)
     {
+        Plugin.Instance.eventHandler.RestoreDoorLockStates();
         if (__result) 
             foreach(Player player in Player.List)
                 player.Role.Set(RoleTypeId.Spectator);

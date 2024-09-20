@@ -19,7 +19,31 @@ namespace LobbySystem
           public string WaitingStatus { get; set; } = @"<color=yellow>🟨</color> Waiting for Players";
           public string StartingStatus { get; set; } = @"<color=green>🟩</color> Starting in %countdown% Seconds";
 
-          public RoomType SpawnRoom { get; set; } = RoomType.Unknown;
-          public Vector3 SpawnPosition { get; set; } = new Vector3(0, 995.6f, -8);
+          [Description("Spawn configs")]
+          public bool UseRoomsToSpawnAt { get; set; } = true;
+          public List<RoomType> SpawnRooms { get; set; } = new List<RoomType>
+          {
+               RoomType.LczArmory,
+               RoomType.Lcz914,
+               RoomType.LczGlassBox,
+               RoomType.Hcz939,
+               RoomType.Hcz106,
+               RoomType.Hcz079,
+               RoomType.EzPcs,
+               RoomType.EzDownstairsPcs,
+               RoomType.EzUpstairsPcs,
+               RoomType.EzGateA,
+               RoomType.EzGateB
+          };
+          public List<Vector3> DefinedSpawnPosition { get; set; } = new()
+          {
+               new Vector3(0, 995.6f, -8),
+               new Vector3(40, 1040.080f, -32.600f)
+          };
+          [Description("Can players pick up items in lobby?")]
+          public bool AllowItemPickup { get; set; } = false;
+
+          [Description("Can players die from enviromental hazards? (I.E. the death pit in 106s room)")]
+          public bool PlayersDieFromEnviromentalHazards { get; set; } = false;
      }
 }
