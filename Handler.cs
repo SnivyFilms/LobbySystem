@@ -120,7 +120,7 @@ namespace LobbySystem
             {
                 if (door.IsOpen)
                 {
-                    door.IsOpen = false; // Close the door
+                    door.IsOpen = false;
                     Log.Debug($"Closed door: {door.Name}");
                 }
             }
