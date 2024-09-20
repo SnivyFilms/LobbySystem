@@ -25,8 +25,12 @@ namespace LobbySystem
           {
                RoomType.LczArmory,
                RoomType.Lcz914,
+               RoomType.LczClassDSpawn,
+               RoomType.LczGlassBox,
+               RoomType.LczToilets,
                RoomType.Hcz106,
                RoomType.Hcz079,
+               RoomType.HczHid,
                RoomType.EzPcs,
                RoomType.EzDownstairsPcs,
                RoomType.EzUpstairsPcs,

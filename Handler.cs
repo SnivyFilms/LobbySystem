@@ -24,15 +24,15 @@ namespace LobbySystem
         {
             if (config.UseRoomsToSpawnAt)
             {
-                Room? selectedRoom = Room.List.First(room =>
-                    room.Type == config.SpawnRooms[random.Next(config.SpawnRooms.Count)]);
+                Room? selectedRoom = Room.List.FirstOrDefault(room =>
+                    room.Type == config.SpawnRooms[random.Next(1, config.SpawnRooms.Count)]);
                 if (selectedRoom != null)
                     _selectedSpawnPoint = selectedRoom.Position + Vector3.up;
                 Log.Debug($"Selected Room is {selectedRoom}");
             }
             else
             {
-                _selectedSpawnPoint = config.DefinedSpawnPosition[random.Next(config.DefinedSpawnPosition.Count)];
+                _selectedSpawnPoint = config.DefinedSpawnPosition[random.Next(1,config.DefinedSpawnPosition.Count)];
                 Log.Debug($"Selected Spawn Point is {_selectedSpawnPoint}");
             }
         }
@@ -63,10 +63,14 @@ namespace LobbySystem
                 Door.Get(DoorType.Scp079Armory).IsOpen = true;
                 Door.Get(DoorType.LczArmory).IsOpen = true;
                 Door.Get(DoorType.HczArmory).IsOpen = true;
+                Door.Get(DoorType.HID).IsOpen = true;
+                Door.Get(DoorType.HIDLeft).IsOpen = true;
+                Door.Get(DoorType.HIDRight).IsOpen = true;
                 foreach (Door door in Door.List)
                     if (door.Room == Room.Get(RoomType.LczClassDSpawn))
                         door.IsOpen = true;
                 Door.Get(DoorType.LightContainmentDoor).IsOpen = false;
+                Door.Get(DoorType.LczWc).IsOpen = true;
             }
         }
 
@@ -97,6 +101,10 @@ namespace LobbySystem
                 Door.Get(DoorType.Scp079Armory).IsOpen = false;
                 Door.Get(DoorType.LczArmory).IsOpen = false;
                 Door.Get(DoorType.HczArmory).IsOpen = false;
+                Door.Get(DoorType.LczWc).IsOpen = false;
+                Door.Get(DoorType.HID).IsOpen = false;
+                Door.Get(DoorType.HIDLeft).IsOpen = false;
+                Door.Get(DoorType.HIDRight).IsOpen = false;
                 foreach (Door door in Door.List)
                     if (door.Room == Room.Get(RoomType.LczClassDSpawn))
                         door.IsOpen = false;
@@ -210,6 +218,9 @@ namespace LobbySystem
                     ev.Player.Position = roomcoord;
                     break;
                 case DamageType.Falldown:
+                    ev.IsAllowed = false;
+                    break;
+                case DamageType.Hypothermia:
                     ev.IsAllowed = false;
                     break;
             }
