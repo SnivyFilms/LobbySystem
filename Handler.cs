@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using Exiled.API.Features.Doors;
@@ -25,15 +26,25 @@ namespace LobbySystem
         {
             if (config.UseRoomsToSpawnAt)
             {
-                Room? selectedRoom = Room.List.FirstOrDefault(room =>
-                    room.Type == config.SpawnRooms[random.Next(1, config.SpawnRooms.Count)]);
-                if (selectedRoom != null)
+                /*Room? selectedRoom = Room.List.FirstOrDefault(room =>
+                    room.Type == config.SpawnRooms[random.Next(config.SpawnRooms.Count)]);*/
+                List<Room> availableRooms = Room.List.Where(room => config.SpawnRooms.Contains(room.Type)).ToList();
+                if (availableRooms.Count > 0)
+                {
+                    Room selectedRoom = availableRooms[random.Next(availableRooms.Count)];
                     _selectedSpawnPoint = selectedRoom.Position + Vector3.up;
-                Log.Debug($"Selected Room is {selectedRoom}");
+                    Log.Debug($"Selected Room is {selectedRoom}");
+                }
+                else
+                {
+                    Log.Warn("Couldn't select a valid room. Using a defined spawn point");
+                    _selectedSpawnPoint = config.DefinedSpawnPosition[random.Next(config.DefinedSpawnPosition.Count)];
+                    Log.Debug($"Spawn point is {_selectedSpawnPoint}");
+                }
             }
             else
             {
-                _selectedSpawnPoint = config.DefinedSpawnPosition[random.Next(1,config.DefinedSpawnPosition.Count)];
+                _selectedSpawnPoint = config.DefinedSpawnPosition[random.Next(config.DefinedSpawnPosition.Count)];
                 Log.Debug($"Selected Spawn Point is {_selectedSpawnPoint}");
             }
         }
