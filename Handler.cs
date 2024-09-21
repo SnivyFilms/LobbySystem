@@ -1,12 +1,8 @@
 ﻿using Exiled.API.Features;
-using Exiled.Events.EventArgs;
 using MEC;
 using PlayerRoles;
-using System.Linq;
 using UnityEngine;
-using System.Collections.Generic;
 using Exiled.API.Enums;
-using Exiled.API.Extensions;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using Exiled.API.Features.Doors;
@@ -19,8 +15,8 @@ namespace LobbySystem
         private Random random = new Random();
         private Config config = Plugin.Instance.Config;
         private Vector3 _selectedSpawnPoint;
-        private Dictionary<Door, bool> _doorLockStates = new Dictionary<Door, bool>();
-        private List<Door> doorsOpened = new List<Door>();
+        private Dictionary<Door, bool> _doorLockStates = new();
+        private List<Door> doorsOpened = new();
 
         private void SelectRandomSpawnPoint()
         {
