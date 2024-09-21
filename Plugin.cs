@@ -8,7 +8,7 @@
           public override string Name => "LobbySystem";
           public override string Prefix => Name;
           public override string Author => "@misfiy, updated by Vicious Vikki";
-          public override Version Version => new(1, 1, 0);
+          public override Version Version => new(1, 1, 1);
           public static Plugin Instance { get; private set; } = null!;
 
           public Handler eventHandler { get; set; } = null!;
