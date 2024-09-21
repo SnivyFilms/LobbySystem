@@ -217,17 +217,8 @@ namespace LobbySystem
                     ev.IsAllowed = false;
                     break;
                 case DamageType.Crushed:
-
                     ev.IsAllowed = false;
-                    var roomcoord = ev.Player.CurrentRoom.Doors
-                        .Where(d => d.RequiredPermissions.RequiredPermissions ==
-                                    Interactables.Interobjects.DoorUtils.KeycardPermissions.None).ElementAt(
-                            new Random().Next(ev.Player.CurrentRoom.Doors.Where(d =>
-                                d.RequiredPermissions.RequiredPermissions ==
-                                Interactables.Interobjects.DoorUtils.KeycardPermissions.None).ToList().Count)).Position;
-                    roomcoord += Vector3.forward * 0.4f;
-                    roomcoord += Vector3.up;
-                    ev.Player.Position = roomcoord;
+                    ev.Player.Position = _selectedSpawnPoint;
                     break;
                 case DamageType.Falldown:
                     ev.IsAllowed = false;
