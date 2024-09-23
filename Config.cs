@@ -50,5 +50,8 @@ namespace LobbySystem
 
           [Description("Open some doors for more room to move around before round start")]
           public bool OpenDoorsForMoreRoom { get; set; } = true;
+
+          [Description("Should the doors lock while waiting for the round to start")]
+          public bool LockDoorsBeforeRoundStart { get; set; } = true;
      }
 }

@@ -22,8 +22,6 @@ namespace LobbySystem
         {
             if (config.UseRoomsToSpawnAt)
             {
-                /*Room? selectedRoom = Room.List.FirstOrDefault(room =>
-                    room.Type == config.SpawnRooms[random.Next(config.SpawnRooms.Count)]);*/
                 List<Room> availableRooms = Room.List.Where(room => config.SpawnRooms.Contains(room.Type)).ToList();
                 if (availableRooms.Count > 0)
                 {
@@ -47,15 +45,18 @@ namespace LobbySystem
 
         private void LockAllDoors()
         {
-            _doorLockStates.Clear();
-            doorsOpened.Clear();
-
-            foreach (Door door in Door.List)
+            if (config.LockDoorsBeforeRoundStart)
             {
-                _doorLockStates[door] = door.IsLocked;
+                _doorLockStates.Clear();
+                doorsOpened.Clear();
 
-                if (!door.IsLocked)
-                    door.ChangeLock(DoorLockType.AdminCommand);
+                foreach (Door door in Door.List)
+                {
+                    _doorLockStates[door] = door.IsLocked;
+
+                    if (!door.IsLocked)
+                        door.ChangeLock(DoorLockType.AdminCommand);
+                }
             }
 
             List<DoorType> doorsToOpen = new List<DoorType>
@@ -110,6 +111,9 @@ namespace LobbySystem
 
         public void RestoreDoorLockStates()
         {
+            if (!config.LockDoorsBeforeRoundStart)
+                return;
+            
             foreach (var doorEntry in _doorLockStates)
             {
                 Door door = doorEntry.Key;
