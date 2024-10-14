@@ -6,6 +6,7 @@ using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using Exiled.API.Features.Doors;
+using VoiceChat;
 using Random = System.Random;
 
 namespace LobbySystem
@@ -186,6 +187,8 @@ namespace LobbySystem
             if (!Round.IsLobby) return;
             ev.Player.Role.Set(RoleTypeId.Tutorial);
             ev.Player.Teleport(_selectedSpawnPoint);
+            if (config.GiveGlobalIntercom)
+                ev.Player.VoiceChannel = VoiceChatChannel.PreGameLobby;
         }
 
         public void OnChoosingStartTeamQueue(ChoosingStartTeamQueueEventArgs ev)
@@ -231,8 +234,12 @@ namespace LobbySystem
                     foreach (Player player in Player.List.Where(p => p.IsAlive))
                         player.Role.Set(RoleTypeId.Spectator);
 
-                    RestoreDoorLockStates();
-                    CleanUpRagdolls();
+                    if(config.LockDoorsBeforeRoundStart)
+                        RestoreDoorLockStates();
+                    if(config.CleanUpRagdollsAtRoundStart)
+                        CleanUpRagdolls();
+                    if(config.GiveGlobalIntercom)
+                        ClearGlobalIntercom();
                     Round.Start();
                     yield break;
                 }
@@ -249,12 +256,12 @@ namespace LobbySystem
 
         public void OnPlayerHurt(HurtingEventArgs ev)
         {
-            if (config.PlayersDieFromEnviromentalHazards)
-                return;
-
             if (!Round.IsLobby)
                 return;
-
+            
+            if (config.PlayersDieFromEnviromentalHazards)
+                return;
+            
             if (ev.Player == null)
                 return;
 
@@ -287,6 +294,15 @@ namespace LobbySystem
             if (!config.CleanUpRagdollsAtRoundStart)
                 return;
             Map.CleanAllRagdolls();
+        }
+
+        public void ClearGlobalIntercom()
+        {
+            if (config.GiveGlobalIntercom)
+            {
+                foreach (Player player in Player.List)
+                    player.VoiceChannel = VoiceChatChannel.None;
+            }
         }
     }
 }

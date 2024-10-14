@@ -25,6 +25,7 @@ internal static class CommandPatch
     {
         Plugin.Instance.eventHandler.RestoreDoorLockStates();
         Plugin.Instance.eventHandler.CleanUpRagdolls();
+        Plugin.Instance.eventHandler.ClearGlobalIntercom();
         if (__result) 
             foreach(Player player in Player.List)
                 player.Role.Set(RoleTypeId.Spectator);

@@ -57,5 +57,8 @@ namespace LobbySystem
 
           [Description("Clean up ragdolls at round start?")]
           public bool CleanUpRagdollsAtRoundStart { get; set; } = true;
+
+          [Description("Give players Global Intercom before round start?")]
+          public bool GiveGlobalIntercom { get; set; } = true;
      }
 }
