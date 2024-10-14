@@ -24,6 +24,7 @@ internal static class CommandPatch
     private static void Postfix(bool __result)
     {
         Plugin.Instance.eventHandler.RestoreDoorLockStates();
+        Plugin.Instance.eventHandler.CleanUpRagdolls();
         if (__result) 
             foreach(Player player in Player.List)
                 player.Role.Set(RoleTypeId.Spectator);

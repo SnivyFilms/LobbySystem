@@ -18,28 +18,64 @@ namespace LobbySystem
         private Dictionary<Door, bool> _doorLockStates = new();
         private List<Door> doorsOpened = new();
 
+        public enum SpawnEnum
+        {
+            Rooms, RoomsAndCoords, Coords
+        }
         private void SelectRandomSpawnPoint()
         {
-            if (config.UseRoomsToSpawnAt)
+            switch (config.SpawnType)
             {
-                List<Room> availableRooms = Room.List.Where(room => config.SpawnRooms.Contains(room.Type)).ToList();
-                if (availableRooms.Count > 0)
+                case SpawnEnum.Rooms:
                 {
-                    Room selectedRoom = availableRooms[random.Next(availableRooms.Count)];
-                    _selectedSpawnPoint = selectedRoom.Position + Vector3.up;
-                    Log.Debug($"Selected Room is {selectedRoom}");
+                    List<Room> availableRooms = Room.List.Where(room => config.SpawnRooms.Contains(room.Type)).ToList();
+                    if (availableRooms.Count > 0)
+                    {
+                        Room selectedRoom = availableRooms[random.Next(availableRooms.Count)];
+                        _selectedSpawnPoint = selectedRoom.Position + Vector3.up;
+                        Log.Debug($"Selected Room is {selectedRoom}");
+                    }
+                    else
+                    {
+                        Log.Warn("Couldn't select a valid room. Using a defined spawn point");
+                        _selectedSpawnPoint = config.DefinedSpawnPosition[random.Next(config.DefinedSpawnPosition.Count)];
+                        Log.Debug($"Spawn point is {_selectedSpawnPoint}");
+                    }
+
+                    break;
                 }
-                else
+                case SpawnEnum.Coords:
                 {
-                    Log.Warn("Couldn't select a valid room. Using a defined spawn point");
                     _selectedSpawnPoint = config.DefinedSpawnPosition[random.Next(config.DefinedSpawnPosition.Count)];
-                    Log.Debug($"Spawn point is {_selectedSpawnPoint}");
+                    Log.Debug($"Selected Spawn Point is {_selectedSpawnPoint}");
+                    break;
                 }
-            }
-            else
-            {
-                _selectedSpawnPoint = config.DefinedSpawnPosition[random.Next(config.DefinedSpawnPosition.Count)];
-                Log.Debug($"Selected Spawn Point is {_selectedSpawnPoint}");
+                case SpawnEnum.RoomsAndCoords:
+                {
+                    List<Room> availableRooms = Room.List.Where(room => config.SpawnRooms.Contains(room.Type)).ToList();
+                    if (random.Next(1, 2) == 1)
+                    {
+                        if (availableRooms.Count > 0)
+                        {
+                            Room selectedRoom = availableRooms[random.Next(availableRooms.Count)];
+                            _selectedSpawnPoint = selectedRoom.Position + Vector3.up;
+                            Log.Debug($"Selected Room is {selectedRoom}");
+                        }
+                        else
+                        {
+                            Log.Warn("Couldn't select a valid room. Using a defined spawn point");
+                            _selectedSpawnPoint = config.DefinedSpawnPosition[random.Next(config.DefinedSpawnPosition.Count)];
+                            Log.Debug($"Spawn point is {_selectedSpawnPoint}");
+                        }
+                    }
+                    else
+                    {
+                        _selectedSpawnPoint = config.DefinedSpawnPosition[random.Next(config.DefinedSpawnPosition.Count)];
+                        Log.Debug($"Selected Spawn Point is {_selectedSpawnPoint}");
+                    }
+
+                    break;
+                }
             }
         }
 
@@ -196,7 +232,7 @@ namespace LobbySystem
                         player.Role.Set(RoleTypeId.Spectator);
 
                     RestoreDoorLockStates();
-
+                    CleanUpRagdolls();
                     Round.Start();
                     yield break;
                 }
@@ -244,6 +280,13 @@ namespace LobbySystem
         {
             if (Round.IsLobby && !config.AllowItemPickup)
                 ev.IsAllowed = false;
+        }
+
+        public void CleanUpRagdolls()
+        {
+            if (!config.CleanUpRagdollsAtRoundStart)
+                return;
+            Map.CleanAllRagdolls();
         }
     }
 }

@@ -19,8 +19,9 @@ namespace LobbySystem
           public string WaitingStatus { get; set; } = @"<color=yellow>🟨</color> Waiting for Players";
           public string StartingStatus { get; set; } = @"<color=green>🟩</color> Starting in %countdown% Seconds";
 
-          [Description("Spawn configs")]
-          public bool UseRoomsToSpawnAt { get; set; } = true;
+          [Description("Sets the Spawn Type, Default is RoomsAndCoords, there is also Rooms and Coords")]
+          public Handler.SpawnEnum SpawnType { get; set; } = Handler.SpawnEnum.RoomsAndCoords;
+         
           public List<RoomType> SpawnRooms { get; set; } = new List<RoomType>
           {
                RoomType.LczArmory,
@@ -53,5 +54,8 @@ namespace LobbySystem
 
           [Description("Should the doors lock while waiting for the round to start")]
           public bool LockDoorsBeforeRoundStart { get; set; } = true;
+
+          [Description("Clean up ragdolls at round start?")]
+          public bool CleanUpRagdollsAtRoundStart { get; set; } = true;
      }
 }
