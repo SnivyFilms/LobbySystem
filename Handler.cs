@@ -195,7 +195,7 @@ namespace LobbySystem
                 Log.Warn("LobbyRoles config list is empty. Defaulting to Tutorial.");
                 roleToSpawn = RoleTypeId.Tutorial;
             }
-            ev.Player.Role.Set(roleToSpawn);
+            ev.Player.Role.Set(roleToSpawn, RoleSpawnFlags.None);
             ev.Player.Teleport(_selectedSpawnPoint);
             if (config.GiveGlobalIntercom)
                 ev.Player.VoiceChannel = VoiceChatChannel.PreGameLobby;
