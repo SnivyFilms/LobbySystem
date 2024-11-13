@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Interfaces;
 using System.ComponentModel;
+using PlayerRoles;
 using UnityEngine;
 
 namespace LobbySystem
@@ -60,5 +61,12 @@ namespace LobbySystem
 
           [Description("Give players Global Intercom before round start?")]
           public bool GiveGlobalIntercom { get; set; } = true;
+          
+          [Description("List of roles players can spawn as before the game starts")]
+          public List<RoleTypeId> LobbyRoles { get; set; } = new List<RoleTypeId>
+          {
+               RoleTypeId.ClassD,
+               RoleTypeId.Tutorial
+          };
      }
 }

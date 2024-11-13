@@ -185,7 +185,17 @@ namespace LobbySystem
         public void OnVerified(VerifiedEventArgs ev)
         {
             if (!Round.IsLobby) return;
-            ev.Player.Role.Set(RoleTypeId.Tutorial);
+            RoleTypeId roleToSpawn;
+            if (config.LobbyRoles.Count > 0)
+            {
+                roleToSpawn = config.LobbyRoles[random.Next(config.LobbyRoles.Count)];
+            }
+            else
+            {
+                Log.Warn("LobbyRoles config list is empty. Defaulting to Tutorial.");
+                roleToSpawn = RoleTypeId.Tutorial;
+            }
+            ev.Player.Role.Set(roleToSpawn);
             ev.Player.Teleport(_selectedSpawnPoint);
             if (config.GiveGlobalIntercom)
                 ev.Player.VoiceChannel = VoiceChatChannel.PreGameLobby;
