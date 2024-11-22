@@ -54,7 +54,7 @@ namespace LobbySystem
                 case SpawnEnum.RoomsAndCoords:
                 {
                     List<Room> availableRooms = Room.List.Where(room => config.SpawnRooms.Contains(room.Type)).ToList();
-                    if (random.Next(1, 2) == 1)
+                    if (random.Next(0, 2) == 1)
                     {
                         if (availableRooms.Count > 0)
                         {
