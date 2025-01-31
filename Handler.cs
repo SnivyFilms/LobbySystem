@@ -110,9 +110,9 @@ namespace LobbySystem
                 DoorType.Scp079Armory,
                 DoorType.LczArmory,
                 DoorType.HczArmory,
-                DoorType.HID,
-                DoorType.HIDLeft,
-                DoorType.HIDRight,
+                DoorType.HIDChamber,
+                DoorType.HIDUpper,
+                DoorType.HIDLower,
                 DoorType.LczWc
             };
             

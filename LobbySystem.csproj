@@ -10,14 +10,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EXILEDOFFICIAL" Version="8.11.0" />
+    <PackageReference Include="ExMod.Exiled" Version="9.5.0" />
     <PackageReference Include="Lib.Harmony" Version="2.2.2" />
     <PackageReference Include="UnityEngine.Modules" Version="2019.4.15" IncludeAssets="compile" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" Private="false" />
-    <Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" Private="false" />
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath Condition="'$(OS)' == 'Windows_NT'">$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath Condition="'$(OS)' != 'Windows_NT'">..\..\Exiled_Resources\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="Mirror">
+      <HintPath Condition="'$(OS)' == 'Windows_NT'">$(EXILED_REFERENCES)\Mirror.dll</HintPath>
+      <HintPath Condition="'$(OS)' != 'Windows_NT'">..\..\Exiled_Resources\Mirror.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
