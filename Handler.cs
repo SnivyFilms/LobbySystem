@@ -112,7 +112,6 @@ namespace LobbySystem
                 DoorType.HczArmory,
                 DoorType.HIDChamber,
                 DoorType.HIDUpper,
-                DoorType.HIDLower,
                 DoorType.LczWc
             };
             
