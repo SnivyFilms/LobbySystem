@@ -1,9 +1,10 @@
 ﻿using CommandSystem.Commands.RemoteAdmin;
 using CommandSystem.Commands.Shared;
 using Exiled.API.Features;
-using PluginAPI.Events;
 using HarmonyLib;
+using LabApi.Events;
 using PlayerRoles;
+using Round = LabApi.Features.Wrappers.Round;
 
 namespace LobbySystem;
 
@@ -12,7 +13,7 @@ internal static class RoundStartPatch
 {
     private static void Postfix()
     {
-        EventManager.ExecuteEvent( new RoundStartEvent());
+        EventManager.InvokeEvent(Round.Start);
         Server.Host.ReferenceHub.characterClassManager.NetworkRoundStarted = true;
         Server.Host.ReferenceHub.characterClassManager.RpcRoundStarted();
     }
