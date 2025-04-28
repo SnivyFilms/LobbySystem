@@ -13,7 +13,8 @@ internal static class RoundStartPatch
 {
     private static void Postfix()
     {
-        EventManager.InvokeEvent(Round.Start);
+        //EventManager.InvokeEvent(Round.Start);
+        //Round.Start();
         Server.Host.ReferenceHub.characterClassManager.NetworkRoundStarted = true;
         Server.Host.ReferenceHub.characterClassManager.RpcRoundStarted();
     }
@@ -30,6 +31,7 @@ internal static class CommandPatch
         if (__result) 
             foreach(Player player in Player.List)
                 player.Role.Set(RoleTypeId.Spectator);
+        //Round.Start();
     }
 }
 
