@@ -41,8 +41,8 @@ namespace LobbySystem
           };
           public List<Vector3> DefinedSpawnPosition { get; set; } = new()
           {
-               new Vector3(0, 995.6f, -8),
-               new Vector3(40, 1040.080f, -32.600f)
+               new Vector3(0, 295.6f, -8),
+               new Vector3(40, 340.080f, -32.600f)
           };
           [Description("Can players pick up items in lobby?")]
           public bool AllowItemPickup { get; set; } = false;
