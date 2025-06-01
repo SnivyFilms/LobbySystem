@@ -68,5 +68,11 @@ namespace LobbySystem
                RoleTypeId.ClassD,
                RoleTypeId.Tutorial
           };
+          [Description("What items are given in the lobby?")]
+          public List<ItemType> LobbyItems { get; set; } = new List<ItemType>
+          {
+               ItemType.KeycardChaosInsurgency,
+               ItemType.Jailbird,
+          };
      }
 }

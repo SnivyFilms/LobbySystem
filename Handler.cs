@@ -111,7 +111,7 @@ namespace LobbySystem
                 DoorType.LczArmory,
                 DoorType.HczArmory,
                 DoorType.HIDChamber,
-                DoorType.HIDUpper,
+                DoorType.HIDLab,
                 DoorType.LczWc
             };
             
@@ -198,6 +198,13 @@ namespace LobbySystem
             ev.Player.Teleport(_selectedSpawnPoint);
             if (config.GiveGlobalIntercom)
                 ev.Player.VoiceChannel = VoiceChatChannel.PreGameLobby;
+            if (config.LobbyItems.Count > 0)
+            {
+                foreach (ItemType item in config.LobbyItems)
+                {
+                    ev.Player.AddItem(item);
+                }
+            }
         }
 
         public void OnChoosingStartTeamQueue(ChoosingStartTeamQueueEventArgs ev)
@@ -241,7 +248,10 @@ namespace LobbySystem
                 if (countdown == 0)
                 {
                     foreach (Player player in Player.List.Where(p => p.IsAlive))
+                    {
+                        player.ClearInventory();
                         player.Role.Set(RoleTypeId.Spectator);
+                    }
 
                     if(config.LockDoorsBeforeRoundStart)
                         RestoreDoorLockStates();

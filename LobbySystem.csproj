@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ExMod.Exiled" Version="9.6.0-beta6" />
+    <PackageReference Include="ExMod.Exiled" Version="9.6.0" />
     <PackageReference Include="Lib.Harmony" Version="2.2.2" />
     <PackageReference Include="UnityEngine.Modules" Version="2019.4.15" IncludeAssets="compile" />
   </ItemGroup>
