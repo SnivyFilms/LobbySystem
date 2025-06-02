@@ -249,7 +249,7 @@ namespace LobbySystem
                 {
                     foreach (Player player in Player.List.Where(p => p.IsAlive))
                     {
-                        player.ClearInventory();
+                        player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.All);
                         player.Role.Set(RoleTypeId.Spectator);
                     }
 
