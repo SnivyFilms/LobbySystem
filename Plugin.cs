@@ -8,7 +8,7 @@
           public override string Name => "LobbySystem";
           public override string Prefix => Name;
           public override string Author => "@misfiy, updated by Vicious Vikki";
-          public override Version Version => new(1, 4, 0);
+          public override Version Version => new(1, 4, 2);
           public static Plugin Instance { get; private set; } = null!;
 
           public Handler eventHandler { get; set; } = null!;
@@ -25,6 +25,7 @@
                Exiled.Events.Handlers.Server.WaitingForPlayers += eventHandler.OnWaitingForPlayers;
                Exiled.Events.Handlers.Server.ChoosingStartTeamQueue += eventHandler.OnChoosingStartTeamQueue;
                Exiled.Events.Handlers.Player.Verified += eventHandler.OnVerified;
+               Exiled.Events.Handlers.Player.DroppingItem += eventHandler.OnDroppingItem;
 
                base.OnEnabled();
           }
@@ -37,6 +38,7 @@
                Exiled.Events.Handlers.Server.WaitingForPlayers -= eventHandler.OnWaitingForPlayers;
                Exiled.Events.Handlers.Server.ChoosingStartTeamQueue -= eventHandler.OnChoosingStartTeamQueue;
                Exiled.Events.Handlers.Player.Verified -= eventHandler.OnVerified;
+               Exiled.Events.Handlers.Player.DroppingItem -= eventHandler.OnDroppingItem;
 
                harmony.UnpatchAll();
                eventHandler = null!;

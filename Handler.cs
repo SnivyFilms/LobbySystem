@@ -18,6 +18,7 @@ namespace LobbySystem
         private Vector3 _selectedSpawnPoint;
         private Dictionary<Door, bool> _doorLockStates = new();
         private List<Door> doorsOpened = new();
+        private bool _allowedItemGiving = false;
 
         public enum SpawnEnum
         {
@@ -178,6 +179,8 @@ namespace LobbySystem
             LockAllDoors();
 
             GameObject.Find("StartRound").transform.localScale = Vector3.zero;
+            if (config.LobbyItems.Count > 0)
+                _allowedItemGiving = true;
             Timing.RunCoroutine(Lobby());
         }
 
@@ -198,7 +201,7 @@ namespace LobbySystem
             ev.Player.Teleport(_selectedSpawnPoint);
             if (config.GiveGlobalIntercom)
                 ev.Player.VoiceChannel = VoiceChatChannel.PreGameLobby;
-            if (config.LobbyItems.Count > 0)
+            if (config.LobbyItems.Count > 0 && _allowedItemGiving)
             {
                 foreach (ItemType item in config.LobbyItems)
                 {
@@ -245,11 +248,18 @@ namespace LobbySystem
                 else
                     Map.Broadcast(1, text, default, true);
 
+                if (countdown < 2)
+                {
+                    _allowedItemGiving = false;
+                    foreach (Player player in Player.List.Where(p => p.IsAlive))
+                    {
+                        player.ClearItems();
+                    }
+                }
                 if (countdown == 0)
                 {
                     foreach (Player player in Player.List.Where(p => p.IsAlive))
                     {
-                        player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.All);
                         player.Role.Set(RoleTypeId.Spectator);
                     }
 
@@ -305,6 +315,12 @@ namespace LobbySystem
         public void OnInteractingLocker(InteractingLockerEventArgs ev)
         {
             if (Round.IsLobby && !config.AllowItemPickup)
+                ev.IsAllowed = false;
+        }
+        
+        public void OnDroppingItem(DroppingItemEventArgs ev)
+        {
+            if (Round.IsLobby && !config.AllowDroppingItemsDuringLobby)
                 ev.IsAllowed = false;
         }
 

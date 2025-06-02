@@ -74,5 +74,6 @@ namespace LobbySystem
                ItemType.KeycardChaosInsurgency,
                ItemType.Jailbird,
           };
+          public bool AllowDroppingItemsDuringLobby { get; set; } = false;
      }
 }
