@@ -25,12 +25,14 @@ internal static class CommandPatch
 {
     private static void Postfix(bool __result)
     {
-        Plugin.Instance.eventHandler.RestoreDoorLockStates();
-        Plugin.Instance.eventHandler.CleanUpRagdolls();
-        Plugin.Instance.eventHandler.ClearGlobalIntercom();
-        if (__result) 
-            foreach(Player player in Player.List)
+        if (__result)
+        {
+            Plugin.Instance.eventHandler.RestoreDoorLockStates();
+            Plugin.Instance.eventHandler.CleanUpRagdolls();
+            Plugin.Instance.eventHandler.ClearGlobalIntercom();
+            foreach (Player player in Player.List)
                 player.Role.Set(RoleTypeId.Spectator);
+        }
         //Round.Start();
     }
 }
